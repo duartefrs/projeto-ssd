@@ -516,6 +516,9 @@ def exibir_pca():
 def exibir_ra():
     # Carregar os dados
     df = load_data2()
+    if df is None:
+        return  # Se os dados não puderem ser carregados, sai da função
+    
     st.write("### Conjunto de Dados - Transferências de Jogadores")
     st.dataframe(df)
 
@@ -532,11 +535,11 @@ def exibir_ra():
     st.write("### Dados de Transações Binárias")
     try:
         # Ajuste: Cada valor não nulo/zero será tratado como 1
-        binary_df = df_sampled.applymap(lambda x: 1 if x != 0 else 0)
+        binary_df = df_sampled.applymap(lambda x: 1 if isinstance(x, (int, float)) and x != 0 else 0)
         st.dataframe(binary_df)
     except Exception as e:
         st.error(f"Erro ao transformar os dados em binário: {e}")
-        st.stop()
+        return
 
     # Aplicar Apriori
     st.write("### Regras de Associação com Apriori")
