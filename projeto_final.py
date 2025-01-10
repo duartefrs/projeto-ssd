@@ -249,27 +249,35 @@ def modelo_machine_learning():
         st.write(f"- **F1-Score**: {f1:.2f}")
         st.write(f"- **Precision**: {precision:.2f}")
 
-        # Matriz de Confusão
-        st.write("### Matriz de Confusão")
-        fig, ax = plt.subplots()
-        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-        ax.set_xlabel("Predito")
-        ax.set_ylabel("Real")
-        st.pyplot(fig)
+        # Visualização de Resultados
+        st.write("### Visualização de Resultados")
+        col1, col2 = st.columns(2)
 
-        # Curvas ROC
-        if y_proba is not None:
-            st.write("### Curva ROC e AUC")
-            fig, ax = plt.subplots()
-            for i in range(y_proba.shape[1]):
-                fpr, tpr, _ = roc_curve(y_test == i, y_proba[:, i])
-                ax.plot(fpr, tpr, label=f"Classe {i} (AUC = {auc(fpr, tpr):.2f})")
-            ax.plot([0, 1], [0, 1], 'k--', lw=1)
-            ax.set_xlabel("FPR")
-            ax.set_ylabel("TPR")
-            ax.set_title("Curva ROC")
-            ax.legend()
-            st.pyplot(fig)
+        # Matriz de Confusão no lado esquerdo
+        with col1:
+            st.write("### Matriz de Confusão")
+            fig_cm, ax_cm = plt.subplots(figsize=(5, 5))
+            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar_kws={'shrink': 0.8}, annot_kws={"size": 10})
+            ax_cm.set_xlabel("Predito", labelpad=10)
+            ax_cm.set_ylabel("Real", labelpad=10)
+            ax_cm.tick_params(axis='x', rotation=45)
+            ax_cm.tick_params(axis='y', rotation=45)
+            st.pyplot(fig_cm)
+
+        # Curva ROC no lado direito
+        with col2:
+            if y_proba is not None:
+                st.write("### Curva ROC e AUC")
+                fig_roc, ax_roc = plt.subplots(figsize=(6, 5))
+                for i in range(y_proba.shape[1]):
+                    fpr, tpr, _ = roc_curve(y_test == i, y_proba[:, i])
+                    ax_roc.plot(fpr, tpr, label=f"Classe {i} (AUC = {auc(fpr, tpr):.2f})")
+                ax_roc.plot([0, 1], [0, 1], 'k--', lw=1)
+                ax_roc.set_xlabel("FPR", labelpad=10)
+                ax_roc.set_ylabel("TPR", labelpad=10)
+                ax_roc.set_title("Curva ROC", pad=15)
+                ax_roc.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+                st.pyplot(fig_roc)
 
         # Previsão de Novos Dados
         st.write("### Previsão de Novos Dados")
