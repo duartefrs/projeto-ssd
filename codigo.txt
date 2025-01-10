@@ -1,0 +1,6 @@
+cd "C:\Users\Duarte\Desktop\trabalho maluco"
+streamlit run dashboard_transferencias.py
+cd "C:\Users\Duarte\Desktop\trabalho maluco\projeto"
+streamlit run projeto_final.py
+cd "C:\Users\Duarte\Desktop\trabalho maluco\Nova pasta"
+streamlit run dash_RA.py
